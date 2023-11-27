@@ -7,6 +7,6 @@ const client = new MongoClient(process.env.MONGODB_URI, {
 });
 
 export async function connectToDatabase() {
-  if (!client.isConnected()) await client.connect();
+  await client.connect();
   return client.db("Game");
 }

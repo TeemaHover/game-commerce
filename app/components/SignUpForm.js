@@ -15,6 +15,23 @@ const SignupForm = () => {
   const handleLoginClick = () => {
     router.push("/");
   };
+
+  // const handleTest = async (e) => {
+  //   try {
+  //     const response = await axios.get("/api/test");
+
+  //     if (response.status === 200) {
+  //       // Request successful
+  //       console.log("Request successful");
+  //     } else {
+  //       // Handle error
+  //       console.error("Request failed with status:", response.status);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error making request:", error);
+  //   }
+  // };
+
   const handleSignup = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
@@ -38,18 +55,20 @@ const SignupForm = () => {
         password,
         confirmPassword,
       });
+
       console.log(response);
-      if (response.ok) {
+
+      if (response.status === 200) {
         // Signup successful
         console.log("Signup successful");
         // Redirect to login page or perform other actions
       } else {
         // Handle signup error
-        const data = await response.json();
+        const data = response.data;
         setError(data.error || "Signup failed");
       }
     } catch (error) {
-      console.error("Signup error:", error);
+      console.error("Signup error", error);
       setError("Internal Server Error");
     }
   };
@@ -111,6 +130,7 @@ const SignupForm = () => {
           >
             Sign Up
           </button>
+
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
