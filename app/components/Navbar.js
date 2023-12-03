@@ -12,6 +12,12 @@ const Navbar = () => {
   const handleViewLogo = () => {
     router.push("/pages/home");
   };
+  const handleProfile = () => {
+    router.push("/pages/profile");
+  };
+  const handleViewHistory = () => {
+    router.push("/pages/history");
+  };
   const user = JSON.parse(localStorage.getItem("user"));
   const handleLogout = () => {
     // Clear user information from local storage
@@ -23,7 +29,7 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1" onClick={() => handleViewLogo()}>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+        <a className="btn btn-ghost text-xl">YOLO</a>
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
@@ -81,7 +87,10 @@ const Navbar = () => {
               </a>
             </li>
             <li>
-              <a>Settings</a>
+              <a onClick={handleProfile}>Settings</a>
+            </li>
+            <li>
+              <a onClick={handleViewHistory}>Order History</a>
             </li>
             <li>
               <a onClick={handleLogout}>Logout</a>

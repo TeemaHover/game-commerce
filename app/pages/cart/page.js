@@ -12,7 +12,10 @@ const Cart = () => {
 
   const { cartItems, removeFromCart, addToCart } = useCart();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user"))
+      : null;
   if (!user) {
     router.push("/");
     return null;
@@ -30,7 +33,11 @@ const Cart = () => {
   };
   const handleOrder = async () => {
     try {
-      await axios.post("/api/orders/create", { username: user, cartItems });
+      const requestBody = {
+        username: user.username,
+        cartItems: cartItems, // Assuming cartItems is defined in your component
+      };
+      await axios.post("/api/orders/create", requestBody);
 
       console.log("Order placed successfully!");
     } catch (error) {

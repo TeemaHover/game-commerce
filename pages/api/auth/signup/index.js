@@ -1,7 +1,6 @@
 import { connectToDatabase } from "../../../../app/mongo";
 
 export default async function handler(req, res) {
-  // Run the cors middleware before your route handler
   const { method, body } = req;
 
   if (method === "POST") {
@@ -15,17 +14,15 @@ async function POST(req, res, body) {
   if (!body) {
     return res.status(400).json({ error: "Request body is required" });
   }
-
+  let db;
   try {
-    const { username, password, confirmPassword } = body;
+    const { username, password, confirmPassword, email, phone, address } = body;
 
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ error: "Username and password are required" });
+    if (!username || !password || !email || !phone || !address) {
+      return res.status(400).json({ error: "All fields are required" });
     }
 
-    const db = await connectToDatabase();
+    db = await connectToDatabase();
 
     if (req.url === "/api/auth/signup") {
       // Handle signup logic
@@ -43,6 +40,9 @@ async function POST(req, res, body) {
       const newUser = {
         username,
         password, // NOTE: In a real application, you should hash the password before storing it
+        email,
+        phone,
+        address,
       };
 
       await db.collection("users").insertOne(newUser);
@@ -63,5 +63,10 @@ async function POST(req, res, body) {
   } catch (error) {
     console.error("MongoDB error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    // Close the database connection in the 'finally' block
+    if (db) {
+      await db.client.close();
+    }
   }
 }

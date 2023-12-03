@@ -15,7 +15,7 @@ async function POST(req, res, body) {
   if (!body) {
     return res.status(400).json({ error: "Request body is required" });
   }
-
+  let db;
   try {
     const { username, password } = body;
 
@@ -25,7 +25,7 @@ async function POST(req, res, body) {
         .json({ error: "Username and password are required" });
     }
 
-    const db = await connectToDatabase();
+    db = await connectToDatabase();
 
     if (req.url === "/api/auth/login") {
       // Handle login logic
@@ -42,5 +42,10 @@ async function POST(req, res, body) {
   } catch (error) {
     console.error("MongoDB error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    // Close the database connection in the 'finally' block
+    if (db) {
+      await db.client.close();
+    }
   }
 }

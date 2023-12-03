@@ -17,9 +17,9 @@ async function handlePost(req, res, body) {
   if (!body) {
     return res.status(400).json({ error: "Request body is required" });
   }
-
+  let db;
   try {
-    const db = await connectToDatabase();
+    db = await connectToDatabase();
 
     if (req.url === "/api/orders/create") {
       // Handle order creation logic
@@ -44,5 +44,10 @@ async function handlePost(req, res, body) {
   } catch (error) {
     console.error("MongoDB error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    // Close the database connection in the 'finally' block
+    if (db) {
+      await db.client.close();
+    }
   }
 }

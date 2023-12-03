@@ -11,18 +11,27 @@ const SignupForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+
   const router = useRouter();
   const handleLoginClick = () => {
     router.push("/");
   };
 
   const handleSignup = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-
+    e.preventDefault();
     setError("");
 
-    // Basic client-side validation
-    if (!username || !password || !confirmPassword) {
+    if (
+      !username ||
+      !password ||
+      !confirmPassword ||
+      !email ||
+      !phone ||
+      !address
+    ) {
       setError("All fields are required");
       return;
     }
@@ -31,31 +40,31 @@ const SignupForm = () => {
       setError("Passwords do not match");
       return;
     }
+    if (!/\b[A-Za-z0-9._%+-]+@gmail\.com\b/.test(email)) {
+      setError("Invalid email format. Please use a Gmail address.");
+      return;
+    }
 
     try {
-      // Make a POST request to the signup API endpoint
       const response = await axios.post("/api/auth/signup", {
         username,
         password,
         confirmPassword,
+        email,
+        phone,
+        address,
       });
 
-      console.log(response);
-
       if (response.status === 200) {
-        // Signup successful
         console.log("Signup successful");
-        // Redirect to login page or perform other actions
-      } else {
-        // Handle signup error
-        const data = response.data;
-        setError(data.error || "Signup failed");
+        router.push("/");
       }
     } catch (error) {
       console.error("Signup error", error);
       setError("Internal Server Error");
     }
   };
+
   return (
     <div className="max-w-md mx-auto mt-8">
       <form
@@ -75,6 +84,51 @@ const SignupForm = () => {
             type="text"
             placeholder="Username"
             onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="phone"
+          >
+            Phone
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="phone"
+            type="tel"
+            placeholder="Phone"
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="address"
+          >
+            Address
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="address"
+            type="text"
+            placeholder="Address"
+            onChange={(e) => setAddress(e.target.value)}
           />
         </div>
         <div className="mb-6">

@@ -2,11 +2,12 @@
 import { connectToDatabase } from "../../../../app/mongo";
 
 export default async function handler(req, res) {
+  let db;
   try {
     const { method } = req;
 
     if (method === "GET") {
-      const db = await connectToDatabase();
+      db = await connectToDatabase();
 
       // Retrieve products from the database
       const products = await db.collection("products").find({}).toArray();

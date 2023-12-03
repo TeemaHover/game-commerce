@@ -1,24 +1,28 @@
-// pages/api/products/add.js
 import { connectToDatabase } from "../../../../app/mongo";
 
 export default async function handler(req, res) {
+  let db;
   try {
     if (req.method === "POST") {
-      const { name, description, price } = req.body;
+      const { name, description, price, year, category, image } = req.body;
 
-      if (!name || !description || !price) {
-        return res
-          .status(400)
-          .json({ error: "Name, description, and price are required" });
+      if (!name || !description || !price || !year || !category || !image) {
+        return res.status(400).json({
+          error:
+            "Name, description, price, year, category, and image are required",
+        });
       }
 
-      const db = await connectToDatabase();
+      db = await connectToDatabase();
 
-      // Add the product to the database
+      // You can directly use the provided image URL
       const newProduct = {
         name,
         description,
         price,
+        year,
+        category,
+        image, // Assuming 'image' is the URL provided by the user
       };
 
       const result = await db.collection("products").insertOne(newProduct);
@@ -33,5 +37,10 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error("MongoDB error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    // Close the database connection in the 'finally' block
+    if (db) {
+      await db.client.close();
+    }
   }
 }
