@@ -1,20 +1,16 @@
-// components/Navbar.js
-import Link from "next/link";
+import React from "react";
 
-const Cards = () => {
+const Cards = ({ product, addToCart }) => {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <figure>
-        <img
-          src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-          alt="Shoes"
-        />
-      </figure>
+    <div className="card w-96 bg-primary text-primary-content">
       <div className="card-body">
-        <h2 className="card-title">Shoes!</h2>
-        <p>If a dog chews shoes whose shoes does he choose?</p>
+        <h2 className="card-title">{product.name}</h2>
+        <p>{product.description}</p>
+        <h2 className="card-title">${product.price}</h2>
         <div className="card-actions justify-end">
-          <button className="btn btn-primary">Buy Now</button>
+          <button className="btn" onClick={() => addToCart(product)}>
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

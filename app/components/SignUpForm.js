@@ -16,22 +16,6 @@ const SignupForm = () => {
     router.push("/");
   };
 
-  // const handleTest = async (e) => {
-  //   try {
-  //     const response = await axios.get("/api/test");
-
-  //     if (response.status === 200) {
-  //       // Request successful
-  //       console.log("Request successful");
-  //     } else {
-  //       // Handle error
-  //       console.error("Request failed with status:", response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error making request:", error);
-  //   }
-  // };
-
   const handleSignup = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 

@@ -36,8 +36,10 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         // Login successful
+        const user = { username }; // Create a user object with relevant information
+        localStorage.setItem("user", JSON.stringify(user));
         console.log("Login successful");
-        router.push("/home");
+        router.push("/pages/home");
         // Redirect to the authenticated section or perform other actions
       } else {
         // Handle login error
