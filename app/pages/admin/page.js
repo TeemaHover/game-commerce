@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UsersAdmin from "@/app/components/admin/users";
 import ProductsAdmin from "@/app/components/admin/products";
+import SignupFormAdmin from "@/app/components/admin/signup";
 
 const AdminPage = () => {
   const [selectedContent, setSelectedContent] = useState("users");
@@ -110,6 +111,7 @@ const AdminPage = () => {
       <div className="p-4 sm:ml-64">
         {selectedContent === "users" && <UsersAdmin />}
         {selectedContent === "products" && <ProductsAdmin />}
+        {selectedContent === "signup" && <SignupFormAdmin />}
       </div>
     </div>
   );

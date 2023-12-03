@@ -58,8 +58,22 @@ const ProductsAdmin = () => {
     }
   };
 
-  const handleDelete = (productId) => {
-    // Implement your delete logic here
+  const handleDelete = async (productId) => {
+    try {
+      const response = await axios.delete(`/api/products/${productId}`);
+
+      if (response.status === 200) {
+        // Remove the deleted product from the products state
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product.id !== productId)
+        );
+      } else {
+        console.error("Failed to delete product:", response.data.error);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+
     console.log(`Delete product with ID: ${productId}`);
   };
 
@@ -123,7 +137,7 @@ const ProductsAdmin = () => {
                     </td>
                     <td className="px-6 py-4 text-center">
                       <button
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleDelete(product._id)}
                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                       >
                         Delete
