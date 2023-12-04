@@ -9,12 +9,101 @@ import SignupFormAdmin from "@/app/components/admin/signup";
 
 const AdminPage = () => {
   const [selectedContent, setSelectedContent] = useState("users");
+  const [admin, setAdmin] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleAdminLogin = async (e) => {
+    e.preventDefault();
+
+    if (!username || !password) {
+      alert("Please enter both username and password");
+      return;
+    }
+
+    try {
+      // Make a POST request to the login API endpoint
+      const response = await axios.post("/api/auth/admina", {
+        username,
+        password,
+      });
+
+      console.log(response);
+
+      if (response.status === 200) {
+        const user = { username };
+        localStorage.setItem("admin", JSON.stringify(user));
+        setAdmin(user);
+        console.log("Login successful");
+        router.push("/pages/admin");
+      } else {
+        const data = response.data;
+      }
+    } catch (error) {
+      console.error("Login error", error);
+    }
+  };
 
   // Function to handle sidebar button clicks
   const handleSidebarButtonClick = (content) => {
     setSelectedContent(content);
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem("admin");
+    setAdmin(null);
+  };
+  console.log(admin);
+  if (!admin) {
+    return (
+      <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex w-full items-center justify-center h-screen">
+          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="username"
+              >
+                Username
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="username"
+                type="text"
+                placeholder="Username"
+                value={username} // Add this line
+                onChange={(e) => setUsername(e.target.value)} // Add this line
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                id="password"
+                type="password"
+                placeholder="Password"
+                value={password} // Add this line
+                onChange={(e) => setPassword(e.target.value)} // Add this line
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+                onClick={handleAdminLogin}
+              >
+                Log In
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <aside
@@ -63,7 +152,7 @@ const AdminPage = () => {
             <li>
               <a
                 href="#"
-                onClick={() => handleSidebarButtonClick("signout")}
+                onClick={() => handleLogout()}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <svg
