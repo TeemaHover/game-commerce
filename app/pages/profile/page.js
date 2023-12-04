@@ -1,4 +1,4 @@
-// components/Profile.js
+
 "use client";
 import React, { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
@@ -26,10 +26,10 @@ const Profile = () => {
 
   useEffect(() => {
     if (!user) {
-      return; // If there's no user, do nothing
+      return;
     }
 
-    fetchUserDetails(); // Fetch user details when the component mounts
+    fetchUserDetails();
   }, []);
 
   const handleLogout = () => {
@@ -48,20 +48,20 @@ const Profile = () => {
 
   const handleSaveProfile = async () => {
     try {
-      // Prepare the request body
+     
       const requestBody = {
         username: user.username,
         email: user.email,
         phone: user.phone,
         address: user.address,
-        // Add other fields as needed
+        
       };
 
-      // Send a PUT request to the user edit API
+      
       await axios.put(`/api/users/edit`, requestBody);
 
       setIsEditing(false);
-      fetchUserDetails(); // Fetch updated user details
+      fetchUserDetails(); 
     } catch (error) {
       console.error("Error saving user details:", error);
     }
@@ -99,7 +99,7 @@ const Profile = () => {
                     className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                   />
                 ) : (
-                  user.username
+                  user?.username || "No username available"
                 )}
               </h3>
 
@@ -118,7 +118,7 @@ const Profile = () => {
                           className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                         />
                       ) : (
-                        user.address
+                        user?.address || "No address available"
                       )}
                     </td>
                   </tr>
@@ -135,7 +135,7 @@ const Profile = () => {
                           className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                         />
                       ) : (
-                        user.phone
+                        user?.phone || "No phone available"
                       )}
                     </td>
                   </tr>
@@ -152,7 +152,7 @@ const Profile = () => {
                           className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                         />
                       ) : (
-                        user.email
+                        user?.email || "No email available"
                       )}
                     </td>
                   </tr>

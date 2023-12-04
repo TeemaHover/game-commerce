@@ -31,8 +31,10 @@ const UsersAdmin = () => {
     <div>
       <h1>User Management</h1>
       <div>
-        <div className="mx-40 my-10">
-          {users.length > 0 ? (
+        <div className="">
+          {loading ? (
+          <p>Loading...</p>
+        ) : users.length > 0 ? (
             <div>
               <table className="min-w-full bg-slate-300 rounded-3xl border-gray-300 dark:bg-gray-800 dark:border-gray-700">
                 <thead>

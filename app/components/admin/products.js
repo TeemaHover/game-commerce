@@ -80,12 +80,12 @@ const ProductsAdmin = () => {
   return (
     <div>
       <h1>Product Management</h1>
-      <div className="mx-40 my-10">
+      <div className="">
         {loading ? (
           <p>Loading...</p>
         ) : products.length > 0 ? (
           <div>
-            <table className="min-w-full bg-slate-300 rounded-3xl border-gray-300 dark:bg-gray-800 dark:border-gray-700">
+            <table className="min-w-min bg-slate-300 rounded-3xl border-gray-300 dark:bg-gray-800 dark:border-gray-700">
               <thead>
                 <tr>
                   <th className="px-6 py-3 font-medium text-gray-900 dark:text-white">

@@ -1,10 +1,12 @@
-// components/Navbar.js
+
 "use client";
-import Link from "next/link";
+
 import { useRouter } from "next/navigation";
+import { useEffect,useState } from "react";
 
 const Navbar = () => {
   const router = useRouter();
+
 
   const handleViewCart = () => {
     router.push("/pages/cart");
@@ -18,7 +20,17 @@ const Navbar = () => {
   const handleViewHistory = () => {
     router.push("/pages/history");
   };
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  const [clientUser, setClientUser] = useState(null);
+
+  useEffect(() => {
+    // Fetch user data or perform any other client-side logic
+    const clientUser = JSON.parse(localStorage.getItem("user"));
+    setClientUser(clientUser);
+  }, []);
+
+  
+
   const handleLogout = () => {
     // Clear user information from local storage
     localStorage.removeItem("user");
@@ -83,7 +95,7 @@ const Navbar = () => {
             <li>
               <a className="justify-between">
                 Name
-                <span className="badge">{user.username}</span>
+                <span className="badge">{!clientUser ? null : clientUser.username}</span>
               </a>
             </li>
             <li>

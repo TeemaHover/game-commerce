@@ -6,6 +6,7 @@ import Navbar from "@/app/components/Navbar";
 
 const OrderHistory = () => {
   const [orderHistory, setOrderHistory] = useState([]);
+  const [loading,setLoading] = useState(true)
   const user =
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("user"))
@@ -21,9 +22,10 @@ const OrderHistory = () => {
     try {
       const response = await axios.get(`/api/orders/history/${user.username}`);
       setOrderHistory(response.data);
+      setLoading(false)
     } catch (error) {
       console.error("Error fetching order history: This error is her");
-      //   console.error("Error fetching order history:", error);
+     
     }
   };
 
@@ -32,7 +34,7 @@ const OrderHistory = () => {
       <Navbar />
       <div className="mx-40 my-10">
         <h1>Order History</h1>
-        {orderHistory.length > 0 ? (
+        {loading ? <div>Loading.....</div> : orderHistory.length > 0 ? (
           <table className="min-w-full bg-slate-500 rounded-3xl border-gray-300 dark:bg-gray-800 dark:border-gray-700">
             <thead>
               <tr>

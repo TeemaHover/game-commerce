@@ -19,7 +19,7 @@ async function handleGet(req, res) {
 
     const username = req.query.username;
 
-    // Check if username is provided
+    
     if (!username) {
       return res.status(400).json({ error: "Username is required in the URL" });
     }
@@ -33,10 +33,5 @@ async function handleGet(req, res) {
   } catch (error) {
     console.error("MongoDB error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
-  } finally {
-    // Close the database connection in the 'finally' block
-    if (db) {
-      await db.client.close();
-    }
-  }
+  } 
 }
