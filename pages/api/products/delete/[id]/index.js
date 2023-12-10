@@ -14,10 +14,10 @@ export default async function handler(req, res) {
 async function handleDelete(req, res) {
   try {
     const db = await connectToDatabase();
-    const { _id } = req.body;
-
+    const { id } = req.query;
+    console.log("id: ", id);
     const result = await db.collection("products").deleteOne({
-      _id: new ObjectId(_id),
+      _id: new ObjectId(id),
     });
 
     if (result.deletedCount === 1) {

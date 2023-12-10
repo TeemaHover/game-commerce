@@ -15,10 +15,9 @@ async function handlePut(req, res) {
   try {
     const db = await connectToDatabase();
 
-    // Assuming your request body contains the updated product details and the product ID
     const { _id, name, price, year, category, description, image } = req.body;
     console.log(_id, name);
-    // Update the product in the database based on the product ID
+
     const result = await db.collection("products").updateOne(
       { _id: new ObjectId(_id) },
       {

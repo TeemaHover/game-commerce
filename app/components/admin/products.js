@@ -6,6 +6,17 @@ const ProductsAdmin = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editProduct, setEditProduct] = useState(null);
+  const [addProductModalOpen, setAddProductModalOpen] = useState(false);
+
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    price: 0,
+    year: 2023,
+    category: "",
+    description: "",
+    image: "",
+    // Add other properties as needed
+  });
 
   useEffect(() => {
     // Fetch all products when the component mounts
@@ -57,15 +68,33 @@ const ProductsAdmin = () => {
       console.error("Error updating product:", error);
     }
   };
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleDelete = async (productId) => {
     try {
-      const response = await axios.delete(`/api/products/${productId}`);
+      const response = await axios.post("/api/products/add", newProduct);
 
       if (response.status === 200) {
-        // Remove the deleted product from the products state
+        // Successfully added to the database
+        setProducts((prevProducts) => [...prevProducts, response.data]);
+        setAddProductModalOpen(false);
+      } else {
+        console.error("Failed to add product:", response.data.error);
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
+  };
+
+  const handleDelete = async (deletedProduct) => {
+    try {
+      const response = await axios.delete(
+        `/api/products/delete/${deletedProduct}`
+      );
+
+      if (response.status === 200) {
         setProducts((prevProducts) =>
-          prevProducts.filter((product) => product.id !== productId)
+          prevProducts.filter((product) => product._id !== deletedProduct)
         );
       } else {
         console.error("Failed to delete product:", response.data.error);
@@ -74,7 +103,7 @@ const ProductsAdmin = () => {
       console.error("Error deleting product:", error);
     }
 
-    console.log(`Delete product with ID: ${productId}`);
+    console.log(`Delete product with ID: ${deletedProduct}`);
   };
 
   return (
@@ -308,6 +337,166 @@ const ProductsAdmin = () => {
           </div>
         ) : (
           <p>No products available.</p>
+        )}
+      </div>
+      <div>
+        <button
+          onClick={() => {
+            setAddProductModalOpen(true);
+          }}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Add Product
+        </button>
+        {addProductModalOpen && (
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75">
+            <div className="bg-white p-8 rounded-lg">
+              <h2 className="text-2xl font-semibold mb-4">Add Product</h2>
+              <form onSubmit={handleAddSubmit}>
+                <div className="mb-4">
+                  <label
+                    htmlFor="image"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Image URL
+                  </label>
+                  <input
+                    type="text"
+                    id="image"
+                    name="image"
+                    value={newProduct.image}
+                    onChange={(e) =>
+                      setNewProduct((prevProduct) => ({
+                        ...prevProduct,
+                        image: e.target.value,
+                      }))
+                    }
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={newProduct.name}
+                    onChange={(e) =>
+                      setNewProduct((prevProduct) => ({
+                        ...prevProduct,
+                        name: e.target.value,
+                      }))
+                    }
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="price"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Price
+                  </label>
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    value={newProduct.price}
+                    onChange={(e) =>
+                      setNewProduct((prevProduct) => ({
+                        ...prevProduct,
+                        price: parseFloat(e.target.value),
+                      }))
+                    }
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="year"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Year
+                  </label>
+                  <input
+                    type="number"
+                    id="year"
+                    name="year"
+                    value={newProduct.year}
+                    onChange={(e) =>
+                      setNewProduct((prevProduct) => ({
+                        ...prevProduct,
+                        year: parseInt(e.target.value, 10),
+                      }))
+                    }
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="category"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Category
+                  </label>
+                  <input
+                    type="text"
+                    id="category"
+                    name="category"
+                    value={newProduct.category}
+                    onChange={(e) =>
+                      setNewProduct((prevProduct) => ({
+                        ...prevProduct,
+                        category: e.target.value,
+                      }))
+                    }
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="description"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    value={newProduct.description}
+                    onChange={(e) =>
+                      setNewProduct((prevProduct) => ({
+                        ...prevProduct,
+                        description: e.target.value,
+                      }))
+                    }
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setAddProductModalOpen(false)}
+                    className="mr-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:border-blue-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm font-medium text-white bg-green-500 border border-transparent rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300"
+                  >
+                    Add Product
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         )}
       </div>
     </div>
